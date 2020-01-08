@@ -1,3 +1,4 @@
+import java.util.Set;
 import java.util.HashMap;
 /**
  * Class Room - a room in an adventure game.
@@ -6,32 +7,20 @@ import java.util.HashMap;
  * "World of Zuul" is a very simple, text based adventure game.  
  *
  * A "Room" represents one location in the scenery of the game.  It is 
- * connected to other rooms via exits.  The exits are labelled north, 
- * east, south, west.  For each direction, the room stores a reference
- * to the neighboring room, or null if there is no exit in that direction.
+ * connected to other rooms via exits.  For each existing exit, the room 
+ * stores a reference to the neighboring room.
  * 
  * @author  Michael Kölling and David J. Barnes
  * @version 2016.02.29
  */
+
 public class Room 
 {
-    // 27-12-2019 17:39 The new code
     private String description;
-    private HashMap<String, Room> exits;
+    private HashMap<String, Room> exits;        // stores exits of this room.
+    private String lookDescriptionString;
     
-    // 27-12-2019 16:32 The updated code 
-    // private Room northExit;
-    // private Room southExit;
-    // private Room eastExit;
-    // private Room westExit;
     
-    // 27-12-2019 16:31 The old code
-    // public String description;
-    // public Room northExit;
-    // public Room southExit;
-    // public Room eastExit;
-    // public Room westExit;
-
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
@@ -41,62 +30,72 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
-        
-        // 27-12-2019 17:42 Added code
         exits = new HashMap<>();
+        
     }
 
     /**
-     * Define the exits of this room.  Every direction either leads
-     * to another room or is null (no exit there).
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
+     * Define an exit from this room.
+     * @param direction The direction of the exit.
+     * @param neighbor  The room to which the exit leads.
      */
     public void setExit(String direction, Room neighbor) 
     {
         exits.put(direction, neighbor);
     }
-
+    
     /**
-     * Return the exit of the direction.
+     * 
      */
-    public Room getExit(String direction)
+    public void setLookDescription(String lookDescription)
     {
-        return exits.get(direction);
+        lookDescriptionString = lookDescription;
     }
     
     /**
-     * @return The description of the room.
+     * @return The short description of the room
+     * (the one that was defined in the constructor).
      */
-    public String getDescription()
+    public String getShortDescription()
     {
         return description;
     }
-    
-    // 27-12-2019 19:17 Replaced by method setExit
+
     /**
-     * Define the exits of this room.  Every direction either leads
-     * to another room or is null (no exit there).
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
+     * Return a description of the room in the form:
+     *     You are in the kitchen.
+     *     Exits: north west
+     * @return A long description of this room
      */
-    // public void setExits(Room north, Room east, Room south, Room west) 
-    // {
-        // if(north != null) {
-            // exits.put("north", north);
-        // }
-        // if(east != null) {
-            // exits.put("east", east);
-        // }
-        // if(south != null) {
-            // exits.put("south", south);
-        // }
-        // if(west != null) {
-            // exits.put("west", west);
-        // }
-    // }
+    public String getLongDescription()
+    {
+        return "You are " + description + ".\n" + getExitString();
+    }
+
+    /**
+     * Return a string describing the room's exits, for example
+     * "Exits: north west".
+     * @return Details of the room's exits.
+     */
+    private String getExitString()
+    {
+        String returnString = "Exits:";
+        Set<String> keys = exits.keySet();
+        for(String exit : keys) {
+            returnString += " " + exit;
+        }
+        return returnString;
+    }
+
+    /**
+     * Return the room that is reached if we go from this room in direction
+     * "direction". If there is no room in that direction, return null.
+     * @param direction The exit's direction.
+     * @return The room in the given direction.
+     */
+    public Room getExit(String direction) 
+    {
+        return exits.get(direction);
+    }
 }
+

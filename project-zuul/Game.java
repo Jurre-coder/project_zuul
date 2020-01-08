@@ -1,3 +1,4 @@
+import java.util.Stack;
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -19,6 +20,16 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Stack<Room> back;
+    
+    /**
+     * Run the program outside BlueJ.
+     */
+    public static void main(String[] args)
+    {
+        Game g = new Game();
+        g.start();
+    }
         
     /**
      * Create the game and initialise its internal map.
@@ -27,6 +38,7 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        back = new Stack<>();
     }
 
     /**
@@ -34,79 +46,30 @@ public class Game
      */
     private void createRooms()
     {
-        Room livingroom, toilet, headbedroom, corridor, basementstairs, kitchen, stairs, outside; 
-        Room kidbedroom, babybedroom, bathroom, gameroom, basement, secretroom;
-        // Room outside, theater, pub, lab, office;
-              
+        Room outside, theater, pub, lab, office;
+      
         // create the rooms
-        livingroom = new Room("the livingroom of the house");
-        toilet = new Room("the toilet of the house");
-        headbedroom = new Room("the bedroom of the parents");
-        corridor = new Room("the corridor which connects the rooms to each other");
-        basementstairs = new Room("the stairs which lead to the basement");
-        kitchen = new Room("the kitchen of the house");
-        stairs = new Room("the stairs from the ground floor to the first floor and the other way around");
-        outside = new Room("the goal");
-        kidbedroom = new Room("the bedroom of the kids");
-        babybedroom = new Room("the bedroom of the baby");
-        bathroom = new Room("the bathroom of the house");
-        gameroom = new Room("the gameroom for everyone");
-        basement = new Room("the underground basement");
-        secretroom = new Room("a place we don't know about");
-        // outside = new Room("outside the main entrance of the university");
-        // theater = new Room("in a lecture theater");
-        // pub = new Room("in the campus pub");
-        // lab = new Room("in a computing lab");
-        // office = new Room("in the computing admin office");
+        outside = new Room("outside the main entrance of the university");
+        theater = new Room("in a lecture theater");
+        pub = new Room("in the campus pub");
+        lab = new Room("in a computing lab");
+        office = new Room("in the computing admin office");
         
         // initialise room exits
-        livingroom.setExit("north", corridor);
-        livingroom.setExit("east", kitchen);
-        livingroom.setExit("west", toilet);
-        toilet.setExit("east", kitchen);
-        headbedroom.setExit("east", basementstairs);
-        headbedroom.setExit("west", corridor);
-        corridor.setExit("north", outside);
-        corridor.setExit("east", headbedroom);
-        corridor.setExit("south", livingroom);
-        corridor.setExit("west", stairs);
-        basementstairs.setExit("east", basement);
-        basementstairs.setExit("west", headbedroom);
-        kitchen.setExit("west", livingroom);
-        stairs.setExit("east", corridor);
-        stairs.setExit("south", corridor);
-        outside.setExit("south", corridor);
-        kidbedroom.setExit("north",corridor);
-        kidbedroom.setExit("east", gameroom);
-        babybedroom.setExit("east", corridor);
-        bathroom.setExit("west", corridor);
-        gameroom.setExit("west", kidbedroom);
-        basement.setExit("south", secretroom);
-        basement.setExit("west", basementstairs);
-        
-        
-        // livingroom.setExits(corridor, kitchen, null, toilet);
-        // toilet.setExits(null, kitchen, null, null);
-        // headbedroom.setExits(null, basementstairs, null, corridor);
-        // corridor.setExits(outside, headbedroom, livingroom, stairs);
-        // basementstairs.setExits(null, basement, null, headbedroom);
-        // kitchen.setExits(null, null, null, livingroom);
-        // stairs.setExits(null, corridor, corridor, null);
-        // outside.setExits(null, null, corridor, null);
-        // kidbedroom.setExits(corridor, gameroom, null, null);
-        // babybedroom.setExits(null, corridor, null, null);
-        // bathroom.setExits(null, null, null, corridor);
-        // gameroom.setExits(null, null, null, kidbedroom);
-        // basement.setExits(null, null, secretroom, basementstairs);
-        // secretroom.setExits(basement, null, null, null);
-        
-        // outside.setExits(null, theater, lab, pub);
-        // theater.setExits(null, null, null, outside);
-        // pub.setExits(null, outside, null, null);
-        // lab.setExits(outside, office, null, null);
-        // office.setExits(null, null, null, lab);
-        currentRoom = livingroom;  // start game outside
-        // currentRoom = outside;  // start game outside
+        outside.setExit("east", theater);
+        outside.setExit("south", lab);
+        outside.setExit("west", pub);
+
+        theater.setExit("west", outside);
+
+        pub.setExit("east", outside);
+
+        lab.setExit("north", outside);
+        lab.setExit("east", office);
+
+        office.setExit("west", lab);
+
+        currentRoom = outside;  // start game outside
     }
 
     /**
@@ -137,7 +100,7 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        printLocationInfo();
+        System.out.println(currentRoom.getLongDescription());
     }
 
     /**
@@ -164,7 +127,7 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
-
+        // else command not recognised.
         return wantToQuit;
     }
 
@@ -181,12 +144,12 @@ public class Game
         System.out.println("around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        parser.showCommands();
     }
 
     /** 
-     * Try to go in one direction. If there is an exit, enter
-     * the new room, otherwise print an error message.
+     * Try to in to one direction. If there is an exit, enter the new
+     * room, otherwise print an error message.
      */
     private void goRoom(Command command) 
     {
@@ -199,7 +162,6 @@ public class Game
         String direction = command.getSecondWord();
 
         // Try to leave current room.
-        // 27-12-2019 Added code
         Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
@@ -207,7 +169,7 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
-            printLocationInfo();
+            System.out.println(currentRoom.getLongDescription());
         }
     }
 
@@ -228,33 +190,11 @@ public class Game
     }
     
     /**
-     * Print the direction where the character is going to.
-     * 27-12-2019 currentRoom.northExit is now currentRoom.getExit("north").
-     *  - This applies to all directions.
+     * Collect all the locations the player has gone to.
      */
-    private void printLocationInfo()
+    private void goBack()
     {
-        System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("Exits: ");
-        if(currentRoom.getExit("north") != null) {
-            System.out.print("north ");
-        }
-        if(currentRoom.getExit("east") != null) {
-            System.out.print("east ");
-        }
-        if(currentRoom.getExit("east") != null) {
-            System.out.print("south ");
-        }
-        if(currentRoom.getExit("west") != null) {
-            System.out.print("west ");
-        }
-        System.out.println();
+        String lastLocation;
+        lastLocation = back.push();
     }
-    
-    /**
-     * Return a string with exits of the rooms included.
-     * For example "Exits: north west".
-     * @return A description of the present exits in the room.
-     */
-    //public String getExitString()
 }

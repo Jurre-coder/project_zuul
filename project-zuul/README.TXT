@@ -1,4 +1,4 @@
-Project: zuul-bad
+Project: zuul-better
 Authors: Michael Kölling and David J. Barnes
 
 This project is part of the material for the book
@@ -7,7 +7,7 @@ This project is part of the material for the book
    Sixth edition
    David J. Barnes and Michael Kölling
    Pearson Education, 2016
-
+   
 This project is a simple framework for an adventure game. In this version,
 it has a few rooms and the ability for a player to walk between these rooms.
 That's all.
@@ -15,13 +15,13 @@ That's all.
 To start this application, create an instance of class "Game" and call its
 "play" method.
 
-This version of the game contains some very bad class design. It should NOT
-be used as a basis for extending the project without fixing these design
-problems. It serves as an example to discuss good and bad design (chapter 8
-of the book).
+This project was written as the starting point of a small Java project.
 
-Chapter 8 of the book contains a detailed description of the problems in this
-project, and how to fix them.
+The goal is to extend the game:
 
-The project 'zuul-better' contains a version of this project with better
-designed class structure. It includes the fixes discussed in the book.
+  - add items to rooms (items may have weight)
+  - add multiple players
+  - add commands (pick, drop, examine, read, ...)
+  - (anything you can think of, really...)
+
+Read chapter 8 of the book to get a detailed description of the project.

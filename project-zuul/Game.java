@@ -12,8 +12,8 @@ import java.util.Stack;
  *  rooms, creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
  * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+ * @author  Jurre de Vries
+ * @version 09-01-2020
  */
 
 public class Game 
@@ -27,8 +27,8 @@ public class Game
      */
     public static void main(String[] args)
     {
-        Game g = new Game();
-        g.start();
+        // Game g = new Game();
+        // g.start();
     }
         
     /**
@@ -38,38 +38,100 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        // The list used for the back-command
         back = new Stack<>();
     }
 
     /**
      * Create all the rooms and link their exits together.
+     * 09-01-2020 - Rooms added.
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room livingroom, toilet, headbedroom, hallway, corridor;
+        Room basementstairs, kitchen, upstairs, downstairs, outside; 
+        Room kidbedroom, babybedroom, bathroom, gameroom, basement, secretroom;
+        
+        // Old code
+        // Room outside, theater, pub, lab, office;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        livingroom = new Room("the livingroom of the house");
+        toilet = new Room("the toilet of the house");
+        headbedroom = new Room("the bedroom of the parents");
+        hallway = new Room("the corridor which connects the rooms downstairs");
+        corridor = new Room("the corridor which connects the rooms upstairs");
+        basementstairs = new Room("the stairs which lead to the basement");
+        kitchen = new Room("the kitchen of the house");
+        downstairs = new Room("the stairs on the ground floor to the first floor");
+        upstairs = new Room("the stairs on the first floor to the ground floor");
+        outside = new Room("the goal");
+        kidbedroom = new Room("the bedroom of the kids");
+        babybedroom = new Room("the bedroom of the baby");
+        bathroom = new Room("the bathroom of the house");
+        gameroom = new Room("the gameroom for everyone");
+        basement = new Room("the underground basement");
+        secretroom = new Room("a place we don't know about");
         
         // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
+        // The rooms downstairs
+        outside.setExit("south", hallway);
+        hallway.setExit("north", outside);
+        hallway.setExit("east", headbedroom);
+        hallway.setExit("south", livingroom);
+        hallway.setExit("west", downstairs);
+        livingroom.setExit("north", hallway);
+        livingroom.setExit("east", kitchen);
+        livingroom.setExit("west", toilet);
+        toilet.setExit("east", kitchen);
+        headbedroom.setExit("east", basementstairs);
+        headbedroom.setExit("west", hallway);
+        kitchen.setExit("west", livingroom);
+        downstairs.setExit("east", hallway);
+        downstairs.setExit("up", upstairs);
+        
+        basementstairs.setExit("east", basement);
+        basementstairs.setExit("west", headbedroom);
+        
+        //The basement rooms
+        basement.setExit("south", secretroom);
+        basement.setExit("west", basementstairs);
+        secretroom.setExit("north", basement);
+        
+        // The rooms upstairs
+        upstairs.setExit("south", corridor);
+        upstairs.setExit("down", downstairs);
+        corridor.setExit("north", upstairs);
+        corridor.setExit("east", bathroom);
+        corridor.setExit("south", kidbedroom);
+        corridor.setExit("west", babybedroom);
+        kidbedroom.setExit("north",corridor);
+        kidbedroom.setExit("east", gameroom);
+        babybedroom.setExit("east", corridor);
+        bathroom.setExit("west", corridor);
+        gameroom.setExit("west", kidbedroom);
+        
+        // Define the exit used for the back-command
+        livingroom.setExit("back", back.pop());
+        toilet.setExit("back", back.pop());
+        headbedroom.setExit("back", back.pop());
+        hallway.setExit("back", back.pop());
+        corridor.setExit("back", back.pop());
+        basementstairs.setExit("back", back.pop());
+        kitchen.setExit("back", back.pop());
+        upstairs.setExit("back", back.pop());
+        downstairs.setExit("back", back.pop()); 
+        kidbedroom.setExit("back", back.pop());
+        babybedroom.setExit("back", back.pop());
+        bathroom.setExit("back", back.pop());
+        gameroom.setExit("back", back.pop());
+        basement.setExit("back", back.pop());
+        secretroom.setExit("back", back.pop());
 
-        theater.setExit("west", outside);
-
-        pub.setExit("east", outside);
-
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-
-        office.setExit("west", lab);
-
-        currentRoom = outside;  // start game outside
+        // Define current room
+        currentRoom = hallway;  // The game starts in the livingroom
+        
+        
     }
 
     /**
@@ -196,5 +258,10 @@ public class Game
     {
         String lastLocation;
         lastLocation = back.push();
+        if(back.size() <= 0) {
+            System.out.println("No history found");
+        } else {
+            back.pop(lastLocation);
+        }
     }
 }

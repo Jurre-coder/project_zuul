@@ -56,22 +56,22 @@ public class Game
         // Room outside, theater, pub, lab, office;
       
         // create the rooms
-        livingroom = new Room("the livingroom of the house");
-        toilet = new Room("the toilet of the house");
-        headbedroom = new Room("the bedroom of the parents");
-        hallway = new Room("the corridor which connects the rooms downstairs");
-        corridor = new Room("the corridor which connects the rooms upstairs");
-        basementstairs = new Room("the stairs which lead to the basement");
-        kitchen = new Room("the kitchen of the house");
-        downstairs = new Room("the stairs on the ground floor to the first floor");
-        upstairs = new Room("the stairs on the first floor to the ground floor");
-        outside = new Room("the goal");
-        kidbedroom = new Room("the bedroom of the kids");
-        babybedroom = new Room("the bedroom of the baby");
-        bathroom = new Room("the bathroom of the house");
-        gameroom = new Room("the gameroom for everyone");
-        basement = new Room("the underground basement");
-        secretroom = new Room("a place we don't know about");
+        livingroom = new Room("at the livingroom of the house");
+        toilet = new Room("at the toilet of the house");
+        headbedroom = new Room("at the bedroom of the parents");
+        hallway = new Room("at the corridor which connects the rooms downstairs");
+        corridor = new Room("at the corridor which connects the rooms upstairs");
+        basementstairs = new Room("at the stairs which lead to the basement");
+        kitchen = new Room("at the kitchen of the house");
+        downstairs = new Room("at the stairs on the ground floor to the first floor");
+        upstairs = new Room("at the stairs on the first floor to the ground floor");
+        outside = new Room("at the end of the game");
+        kidbedroom = new Room("at the bedroom of the kids");
+        babybedroom = new Room("at the bedroom of the baby");
+        bathroom = new Room("at the bathroom of the house");
+        gameroom = new Room("at the gameroom for everyone");
+        basement = new Room("at the underground basement");
+        secretroom = new Room("at a place we don't know about");
         
         // initialise room exits
         // The rooms downstairs
@@ -118,18 +118,18 @@ public class Game
         hallway.setExit("back", back.pop());
         corridor.setExit("back", back.pop());
         basementstairs.setExit("back", back.pop());
-        kitchen.setExit("back", back.pop());
-        upstairs.setExit("back", back.pop());
-        downstairs.setExit("back", back.pop()); 
-        kidbedroom.setExit("back", back.pop());
-        babybedroom.setExit("back", back.pop());
-        bathroom.setExit("back", back.pop());
-        gameroom.setExit("back", back.pop());
-        basement.setExit("back", back.pop());
-        secretroom.setExit("back", back.pop());
+        // kitchen.setExit("back", back.pop());
+        // upstairs.setExit("back", back.pop());
+        // downstairs.setExit("back", back.pop()); 
+        // kidbedroom.setExit("back", back.pop());
+        // babybedroom.setExit("back", back.pop());
+        // bathroom.setExit("back", back.pop());
+        // gameroom.setExit("back", back.pop());
+        // basement.setExit("back", back.pop());
+        // secretroom.setExit("back", back.pop());
 
         // Define current room
-        currentRoom = hallway;  // The game starts in the livingroom
+        currentRoom = outside;  // The game starts in the livingroom
         
         
     }
@@ -230,6 +230,9 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
+            // 11-01-2020 Code added <--
+            back.add(currentRoom);
+            // -->
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
         }
@@ -252,16 +255,21 @@ public class Game
     }
     
     /**
-     * Collect all the locations the player has gone to.
+     * This method is used when the back command was issued.
      */
     private void goBack()
     {
-        String lastLocation;
-        lastLocation = back.push();
-        if(back.size() <= 0) {
-            System.out.println("No history found");
-        } else {
-            back.pop(lastLocation);
-        }
+    Room oldRoom = back.pop();
+    currentRoom = oldRoom;
+    roomIntroduction(currentRoom);
+    }
+    
+    /**
+     * This method prints the description of the current room.
+     * @param introductionRoom The introduction of the room.
+     */
+    private void roomIntroduction(Room introductionRoom)
+    {
+        System.out.println(introductionRoom.getLongDescription());
     }
 }

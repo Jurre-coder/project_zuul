@@ -1,4 +1,4 @@
-
+import java.util.ArrayList;
 /**
  * This class is the main class of the player you are while playing this 
  * game.
@@ -9,26 +9,27 @@
 public class Player
 {
     // instance variables - vervang deze door jouw variabelen
-    private int x;
-
+    private ArrayList<String> items;
+    
     /**
-     * Constructor voor objects van class Player
+     * Constructor voor objects van class Player.
      */
     public Player()
     {
         // geef de instance variables een beginwaarde
-        x = 0;
+        items = new ArrayList<>();
     }
-
+    
     /**
-     * Voorbeeld van een method - schrijf hier jouw comment
-     *
-     * @param  y    deze method krijgt deze parameter mee in de aanroep
-     * @return    deze method geeft de som van x en y terug
+     * This method adds the item to your stock if it can be added.
      */
-    public int voorbeeldMethod(int y)
+    public void addItem(String item)
     {
-        // schrijf hier jouw code
-        return x + y;
+        if(items.size() < 2) {
+            items.add(item);
+            System.out.println("Item is added to your stock.");
+        } else {
+            System.out.println("Your stock is full.");
+        }
     }
 }

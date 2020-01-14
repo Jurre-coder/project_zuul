@@ -12,7 +12,7 @@ import java.util.Stack;
  *  rooms, creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
  * 
- * @author  Jurre de Vries
+ * @author  Jurre de Vries and Rienan Poortvliet
  * @version 09-01-2020
  */
 
@@ -21,6 +21,8 @@ public class Game
     private Parser parser;
     private Room currentRoom;
     private Stack<Room> back;
+    private ArrayList<Item> stock;
+    private Player player;
     
     /**
      * Run the program outside BlueJ.
@@ -40,6 +42,8 @@ public class Game
         parser = new Parser();
         // The list used for the back-command
         back = new Stack<>();
+        stock = new ArrayList<>();
+        player = new Player();
     }
 
     /**
@@ -49,8 +53,9 @@ public class Game
     private void createRooms()
     {
         Room livingroom, toilet, headbedroom, hallway, corridor;
-        Room basementstairs, kitchen, upstairs, downstairs, outside; 
-        Room kidbedroom, babybedroom, bathroom, gameroom, basement, secretroom;
+        Room  kitchen, upstairs, downstairs, kidbedroom, outside; 
+        Room  babybedroom, bathroom, gameroom, basement, secretroom;
+        Room lowbasementstairs, highbasementstairs;
         
         // Old code
         // Room outside, theater, pub, lab, office;
@@ -61,10 +66,11 @@ public class Game
         headbedroom = new Room("at the bedroom of the parents");
         hallway = new Room("at the corridor which connects the rooms downstairs");
         corridor = new Room("at the corridor which connects the rooms upstairs");
-        basementstairs = new Room("at the stairs which lead to the basement");
+        lowbasementstairs = new Room("at the bottom of the stairs which lead to the basement");
+        highbasementstairs = new Room("at the top of the stairs which lead to the basement");
         kitchen = new Room("at the kitchen of the house");
-        downstairs = new Room("at the stairs on the ground floor to the first floor");
-        upstairs = new Room("at the stairs on the first floor to the ground floor");
+        downstairs = new Room("at the bottom of the stairs");
+        upstairs = new Room("at the top of the stairs");
         outside = new Room("at the end of the game");
         kidbedroom = new Room("at the bedroom of the kids");
         babybedroom = new Room("at the bedroom of the baby");
@@ -84,18 +90,21 @@ public class Game
         livingroom.setExit("east", kitchen);
         livingroom.setExit("west", toilet);
         toilet.setExit("east", kitchen);
-        headbedroom.setExit("east", basementstairs);
+        headbedroom.setExit("east", highbasementstairs);
         headbedroom.setExit("west", hallway);
         kitchen.setExit("west", livingroom);
         downstairs.setExit("east", hallway);
         downstairs.setExit("up", upstairs);
         
-        basementstairs.setExit("east", basement);
-        basementstairs.setExit("west", headbedroom);
+        // The basementstairs
+        highbasementstairs.setExit("down", lowbasementstairs);
+        highbasementstairs.setExit("west", headbedroom);
+        lowbasementstairs.setExit("up", highbasementstairs);
+        lowbasementstairs.setExit("east", basement);
         
         //The basement rooms
         basement.setExit("south", secretroom);
-        basement.setExit("west", basementstairs);
+        basement.setExit("west", lowbasementstairs);
         secretroom.setExit("north", basement);
         
         // The rooms upstairs
@@ -112,12 +121,12 @@ public class Game
         gameroom.setExit("west", kidbedroom);
         
         // Define the exit used for the back-command
-        livingroom.setExit("back", back.pop());
-        toilet.setExit("back", back.pop());
-        headbedroom.setExit("back", back.pop());
-        hallway.setExit("back", back.pop());
-        corridor.setExit("back", back.pop());
-        basementstairs.setExit("back", back.pop());
+        // livingroom.setExit("back", back.pop());
+        // toilet.setExit("back", back.pop());
+        // headbedroom.setExit("back", back.pop());
+        // hallway.setExit("back", back.pop());
+        // corridor.setExit("back", back.pop());
+        // basementstairs.setExit("back", back.pop());
         // kitchen.setExit("back", back.pop());
         // upstairs.setExit("back", back.pop());
         // downstairs.setExit("back", back.pop()); 
@@ -189,6 +198,18 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
+        else if (commandWord.equals("back")) {
+            goBack();
+        }
+        else if (commandWord.equals("pickup")) {
+            getItem(command);
+        }
+        else if (commandWord.equals("drop")) {
+            dropItem(command);
+        }
+        else if (commandWord.equals("stock")) {
+            printStock();
+        }
         // else command not recognised.
         return wantToQuit;
     }
@@ -259,17 +280,86 @@ public class Game
      */
     private void goBack()
     {
-    Room oldRoom = back.pop();
-    currentRoom = oldRoom;
-    roomIntroduction(currentRoom);
+        // Go to the last room you've been to
+        Room oldRoom = back.pop();
+        currentRoom = oldRoom;
+        roomIntroduction(currentRoom, false);
     }
     
     /**
      * This method prints the description of the current room.
      * @param introductionRoom The introduction of the room.
+     * @param addBack Check if back was issued.
+     * 
+     * 13-01-2020 Method upgraded.
      */
-    private void roomIntroduction(Room introductionRoom)
+    private void roomIntroduction(Room introductionRoom, boolean addBack) // , Room oldRoom = null
     {
+        // Print the basic description of the room
         System.out.println(introductionRoom.getLongDescription());
+        if(addBack) {
+            // back.push(oldRoom);
+        }
+    }
+    
+    /**
+     * This method makes it possible to pick up an item.
+     * @param The command that was issued.
+     */
+    private void getItem(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            // This will be issued when pickup wasn't specified with an item 
+            System.out.println("What do you want to pick up?");
+        }
+        
+        String item = command.getSecondWord();
+        
+        // The item that has to be picked up by the user
+        Item pickItem = currentRoom.getItem(item);
+        
+        if(pickItem < 2) {
+            // Nothing happens
+        } else {
+            stock.add(pickItem);
+            currentRoom.dropItem(item);
+            System.out.println("You have picked up " + item);
+        }
+    }
+    
+    /**
+     * This method drops the item from the stock.
+     */
+    private void dropItem(Command command)
+    {
+        if(!command.hasSecondWord()) {
+            // This will be issued when drop wasn't specified with an item 
+            System.out.println("What do you want to drop?");
+        }
+        
+        String item = command.getSecondWord();
+        
+        // The item that has to be dropped up by the user
+        Item dropItem = currentRoom.dropItem(item);
+        if(pickItem == null) {
+            System.out.println("There already are no items in stock");
+        } else {
+            stock.remove(dropItem);
+            currentRoom.setItem(new Item(item));
+            System.out.println("You have dropped the following item: " + item);
+        }
+    }
+    
+    /**
+     * Take a look into your stock using this method.
+     */
+    private void printStock()
+    {
+        String itemList = "";
+        for(int i; i < stock.size(); i++) {
+            itemList = " " + stock.get(i).getDescription() + " ";
+        }
+        System.out.println("These are the items you have in stock: ");
+        System.out.println(itemList);
     }
 }

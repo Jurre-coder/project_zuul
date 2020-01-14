@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Player
+comment0.text=\r\n\ This\ class\ is\ the\ main\ class\ of\ the\ player\ you\ are\ while\ playing\ this\ \r\n\ game.\r\n\r\n\ @author\ Jurre\ de\ Vries\r\n\ @version\ 09-01-2020\r\n
+comment1.params=
+comment1.target=Player()
+comment1.text=\r\n\ Constructor\ voor\ objects\ van\ class\ Player.\r\n
+comment2.params=item
+comment2.target=void\ addItem(java.lang.String)
+comment2.text=\r\n\ This\ method\ adds\ the\ item\ to\ your\ stock\ if\ it\ can\ be\ added.\r\n
+numComments=3

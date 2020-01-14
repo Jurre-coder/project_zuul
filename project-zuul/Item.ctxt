@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Item
+comment0.text=\r\n\ This\ class\ contains\ the\ items\ of\ the\ game.\r\n\r\n\ @author\ Jurre\ de\ Vries\ and\ Rienan\ Poortvliet\r\n\ @version\ 13-01-2020\r\n
+comment1.params=
+comment1.target=Item()
+comment1.text=\r\n\ Constructor\ voor\ objects\ van\ class\ Item.\r\n
+comment2.params=
+comment2.target=java.lang.String\ getDescription()
+comment2.text=\r\n\ \r\n\ @return\ This\ method\ returns\ the\ description\ of\ the\ item.\r\n
+numComments=3

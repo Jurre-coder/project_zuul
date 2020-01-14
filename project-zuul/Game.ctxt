@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Game
-comment0.text=\r\n\ \ This\ class\ is\ the\ main\ class\ of\ the\ "World\ of\ Zuul"\ application.\ \r\n\ \ "World\ of\ Zuul"\ is\ a\ very\ simple,\ text\ based\ adventure\ game.\ \ Users\ \r\n\ \ can\ walk\ around\ some\ scenery.\ That's\ all.\ It\ should\ really\ be\ extended\ \r\n\ \ to\ make\ it\ more\ interesting\!\r\n\ \r\n\ \ To\ play\ this\ game,\ create\ an\ instance\ of\ this\ class\ and\ call\ the\ "play"\r\n\ \ method.\r\n\ \r\n\ \ This\ main\ class\ creates\ and\ initialises\ all\ the\ others\:\ it\ creates\ all\r\n\ \ rooms,\ creates\ the\ parser\ and\ starts\ the\ game.\ \ It\ also\ evaluates\ and\r\n\ \ executes\ the\ commands\ that\ the\ parser\ returns.\r\n\ \r\n\ @author\ \ Jurre\ de\ Vries\r\n\ @version\ 09-01-2020\r\n
+comment0.text=\r\n\ \ This\ class\ is\ the\ main\ class\ of\ the\ "World\ of\ Zuul"\ application.\ \r\n\ \ "World\ of\ Zuul"\ is\ a\ very\ simple,\ text\ based\ adventure\ game.\ \ Users\ \r\n\ \ can\ walk\ around\ some\ scenery.\ That's\ all.\ It\ should\ really\ be\ extended\ \r\n\ \ to\ make\ it\ more\ interesting\!\r\n\ \r\n\ \ To\ play\ this\ game,\ create\ an\ instance\ of\ this\ class\ and\ call\ the\ "play"\r\n\ \ method.\r\n\ \r\n\ \ This\ main\ class\ creates\ and\ initialises\ all\ the\ others\:\ it\ creates\ all\r\n\ \ rooms,\ creates\ the\ parser\ and\ starts\ the\ game.\ \ It\ also\ evaluates\ and\r\n\ \ executes\ the\ commands\ that\ the\ parser\ returns.\r\n\ \r\n\ @author\ \ Jurre\ de\ Vries\ and\ Rienan\ Poortvliet\r\n\ @version\ 09-01-2020\r\n
 comment1.params=args
 comment1.target=void\ main(java.lang.String[])
 comment1.text=\r\n\ Run\ the\ program\ outside\ BlueJ.\r\n
@@ -9,10 +9,10 @@ comment10.target=void\ goBack()
 comment10.text=\r\n\ This\ method\ is\ used\ when\ the\ back\ command\ was\ issued.\r\n
 comment11.params=introductionRoom\ addBack
 comment11.target=void\ roomIntroduction(Room,\ boolean)
-comment11.text=\r\n\ This\ method\ prints\ the\ description\ of\ the\ current\ room.\r\n\ @param\ introductionRoom\ The\ introduction\ of\ the\ room.\r\n\ 13-01-2020\ Method\ upgraded.\r\n
-comment12.params=command
-comment12.target=void\ pickItem(Command)
-comment12.text=\r\n\ Pick\ up\ a\ item.\r\n
+comment11.text=\r\n\ This\ method\ prints\ the\ description\ of\ the\ current\ room.\r\n\ @param\ introductionRoom\ The\ introduction\ of\ the\ room.\r\n\ @param\ addBack\ Check\ if\ back\ was\ issued.\r\n\ \r\n\ 13-01-2020\ Method\ upgraded.\r\n
+comment12.params=
+comment12.target=void\ printStock()
+comment12.text=\r\n\ Take\ a\ look\ into\ your\ stock\ using\ this\ method.\r\n
 comment2.params=
 comment2.target=Game()
 comment2.text=\r\n\ Create\ the\ game\ and\ initialise\ its\ internal\ map.\r\n

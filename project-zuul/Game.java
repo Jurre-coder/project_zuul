@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.ArrayList;
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -29,8 +30,8 @@ public class Game
      */
     public static void main(String[] args)
     {
-        // Game g = new Game();
-        // g.start();
+        Game g = new Game();
+        g.play();
     }
         
     /**
@@ -119,23 +120,6 @@ public class Game
         babybedroom.setExit("east", corridor);
         bathroom.setExit("west", corridor);
         gameroom.setExit("west", kidbedroom);
-        
-        // Define the exit used for the back-command
-        // livingroom.setExit("back", back.pop());
-        // toilet.setExit("back", back.pop());
-        // headbedroom.setExit("back", back.pop());
-        // hallway.setExit("back", back.pop());
-        // corridor.setExit("back", back.pop());
-        // basementstairs.setExit("back", back.pop());
-        // kitchen.setExit("back", back.pop());
-        // upstairs.setExit("back", back.pop());
-        // downstairs.setExit("back", back.pop()); 
-        // kidbedroom.setExit("back", back.pop());
-        // babybedroom.setExit("back", back.pop());
-        // bathroom.setExit("back", back.pop());
-        // gameroom.setExit("back", back.pop());
-        // basement.setExit("back", back.pop());
-        // secretroom.setExit("back", back.pop());
 
         // Define current room
         currentRoom = outside;  // The game starts in the livingroom
@@ -281,9 +265,13 @@ public class Game
     private void goBack()
     {
         // Go to the last room you've been to
-        Room oldRoom = back.pop();
-        currentRoom = oldRoom;
-        roomIntroduction(currentRoom, false);
+        if(back.size() == 0) {
+            System.out.println("There is no room to go back to!");
+        } else {
+            Room oldRoom = back.pop();
+            currentRoom = oldRoom;
+            roomIntroduction(currentRoom, false);
+        }
     }
     
     /**
@@ -340,7 +328,7 @@ public class Game
         String item = command.getSecondWord();
         
         // The item that has to be dropped up by the user
-        Item dropItem = currentRoom.dropItem(item);
+        Item pickItem = currentRoom.dropItem(item);
         if(pickItem == null) {
             System.out.println("There already are no items in stock");
         } else {
@@ -356,7 +344,7 @@ public class Game
     private void printStock()
     {
         String itemList = "";
-        for(int i; i < stock.size(); i++) {
+        for(int i = 0; i < stock.size(); i++) {
             itemList = " " + stock.get(i).getDescription() + " ";
         }
         System.out.println("These are the items you have in stock: ");

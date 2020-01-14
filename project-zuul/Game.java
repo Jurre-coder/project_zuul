@@ -62,23 +62,23 @@ public class Game
         // Room outside, theater, pub, lab, office;
       
         // create the rooms
-        livingroom = new Room("at the livingroom of the house");
-        toilet = new Room("at the toilet of the house");
-        headbedroom = new Room("at the bedroom of the parents");
-        hallway = new Room("at the corridor which connects the rooms downstairs");
-        corridor = new Room("at the corridor which connects the rooms upstairs");
-        lowbasementstairs = new Room("at the bottom of the stairs which lead to the basement");
-        highbasementstairs = new Room("at the top of the stairs which lead to the basement");
-        kitchen = new Room("at the kitchen of the house");
+        livingroom = new Room("in the livingroom");
+        toilet = new Room("in the toilet");
+        headbedroom = new Room("in the main bedroom");
+        hallway = new Room("in the hallway downstairs");
+        corridor = new Room("in the hallway upstairs");
+        lowbasementstairs = new Room("at the bottom of the stairs that lead to the basement");
+        highbasementstairs = new Room("at the top of the stairs that lead to the basement");
+        kitchen = new Room("in the kitchen");
         downstairs = new Room("at the bottom of the stairs");
         upstairs = new Room("at the top of the stairs");
-        outside = new Room("at the end of the game");
-        kidbedroom = new Room("at the bedroom of the kids");
-        babybedroom = new Room("at the bedroom of the baby");
-        bathroom = new Room("at the bathroom of the house");
-        gameroom = new Room("at the gameroom for everyone");
-        basement = new Room("at the underground basement");
-        secretroom = new Room("at a place we don't know about");
+        outside = new Room("outside, you did it!");
+        kidbedroom = new Room("in the bedroom of a child");
+        babybedroom = new Room("in the bedroom of a baby");
+        bathroom = new Room("in the bathroom");
+        gameroom = new Room("in the game room");
+        basement = new Room("in the basement");
+        secretroom = new Room("in the secret room");
         
         // initialise room exits
         // The rooms downstairs
@@ -122,7 +122,7 @@ public class Game
         gameroom.setExit("west", kidbedroom);
 
         // Define current room
-        currentRoom = outside;  // The game starts in the livingroom
+        currentRoom = outside;  // The game starts outside
         
         
     }
@@ -142,7 +142,7 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        System.out.println("Thank you for playing our game.  Goodbye.");
     }
 
     /**
@@ -151,8 +151,8 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
+        System.out.println("Welcome to the Escape Man!");
+        System.out.println("Escape Man! is game Jurre and Rienan made as their school project.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
@@ -207,10 +207,10 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("It seems like you might need some help.");
+        System.out.println("Please, allow me to enlighten you.");
         System.out.println();
-        System.out.println("Your command words are:");
+        System.out.println("The command words and their use are:");
         parser.showCommands();
     }
 
@@ -232,7 +232,7 @@ public class Game
         Room nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
+            System.out.println("you can't go this way!");
         }
         else {
             // 11-01-2020 Code added <--
@@ -251,7 +251,8 @@ public class Game
     private boolean quit(Command command) 
     {
         if(command.hasSecondWord()) {
-            System.out.println("Quit what?");
+            System.out.println("If you want to quit the game,");
+            System.out.println("only type the word \"quit\" ");
             return false;
         }
         else {

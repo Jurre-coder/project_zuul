@@ -54,8 +54,8 @@ public class Game
     private void createRooms()
     {
         Room livingroom, toilet, headbedroom, hallway, corridor;
-        Room  kitchen, upstairs, downstairs, kidbedroom, outside; 
-        Room  babybedroom, bathroom, gameroom, basement, secretroom;
+        Room kitchen, upstairs, downstairs, kidbedroom, outside; 
+        Room babybedroom, bathroom, gameroom, basement, secretroom;
         Room lowbasementstairs, highbasementstairs;
         
         // Old code
@@ -182,6 +182,9 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
+        else if (commandWord.equals("look")) {
+            look();
+        }
         else if (commandWord.equals("back")) {
             goBack();
         }
@@ -189,7 +192,7 @@ public class Game
             getItem(command);
         }
         else if (commandWord.equals("drop")) {
-            dropItem(command);
+            //dropItem(command);
         }
         else if (commandWord.equals("stock")) {
             printStock();
@@ -200,6 +203,16 @@ public class Game
 
     // implementations of user commands:
 
+        /**
+     * Here we print out some message that tells
+     * the person playing, what is in the room.
+     * !!!Still needs items!!!
+     */
+    private void look()
+    {
+        System.out.println(currentRoom.lookDescription());
+    }
+    
     /**
      * Print out some help information.
      * Here we print some stupid, cryptic message and a list of the 
@@ -307,37 +320,17 @@ public class Game
         // The item that has to be picked up by the user
         Item pickItem = currentRoom.getItem(item);
         
-        if(pickItem < 2) {
+        if(pickItem == null) {
             // Nothing happens
+            System.out.println("That item is unknown!");
         } else {
             stock.add(pickItem);
-            currentRoom.dropItem(item);
-            System.out.println("You have picked up " + item);
+            //currentRoom.dropItem(item);
+            //System.out.println("You have picked up " + item);
         }
     }
     
-    /**
-     * This method drops the item from the stock.
-     */
-    private void dropItem(Command command)
-    {
-        if(!command.hasSecondWord()) {
-            // This will be issued when drop wasn't specified with an item 
-            System.out.println("What do you want to drop?");
-        }
-        
-        String item = command.getSecondWord();
-        
-        // The item that has to be dropped up by the user
-        Item pickItem = currentRoom.dropItem(item);
-        if(pickItem == null) {
-            System.out.println("There already are no items in stock");
-        } else {
-            stock.remove(dropItem);
-            currentRoom.setItem(new Item(item));
-            System.out.println("You have dropped the following item: " + item);
-        }
-    }
+    
     
     /**
      * Take a look into your stock using this method.
@@ -350,5 +343,5 @@ public class Game
         }
         System.out.println("These are the items you have in stock: ");
         System.out.println(itemList);
-    }
+    } 
 }

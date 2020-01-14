@@ -19,7 +19,7 @@ public class Room
 {
     private String description;
     private HashMap<String, Room> exits;        // stores exits of this room.
-    private String lookDescriptionString;
+    private String lookDescription;
     private ArrayList<Item> items;
     
     /**
@@ -47,11 +47,12 @@ public class Room
     }
     
     /**
-     * 
+     * look description
      */
-    public void setLookDescription(String lookDescription)
+    public String lookDescription()
     {
-        lookDescriptionString = lookDescription;
+        lookDescription = "The items in this room";
+        return lookDescription;
     }
     
     /**
@@ -100,6 +101,40 @@ public class Room
         return exits.get(direction);
     }
     
+    /**
+     * This method makes it possible to pick up an item.
+     * @param index The index of the item.
+     */
+    private Item getItem(int index)
+    {
+        return items.get(index);
+    }
+    
+    /**
+     * This method makes it possible to pick up an item.
+     * @param itemName The name of the item.
+     */
+    public Item getItem(String itemName)
+    {
+        for(int i = 0; i < items.size(); i++) {
+            if(items.get(i).getDescription().equals(itemName)) {
+                return items.get(i);
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * This method drops the item from the stock.
+     */
+    public void dropItem(String itemName)
+    {
+        for(int i = 0; i < items.size(); i++) {
+            if(items.get(i).getDescription().equals(itemName)) {
+                items.remove(i);
+            }
+        }
+    }
     
 }
 
